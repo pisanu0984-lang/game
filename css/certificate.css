@@ -1,0 +1,93 @@
+/* ==========================================================
+   Certificate Preview & Print Stylesheet
+   เกียรติบัตรนักประวัติศาสตร์น้อยดีเด่น ป.3
+   ========================================================== */
+
+.certificate-section-wrapper {
+  margin: 20px 0;
+}
+
+.certificate-frame {
+  max-width: 900px;
+  margin: 0 auto 20px;
+  background: #FFF;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  border: 1px solid #E2E8F0;
+}
+
+#certificateCanvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+/* Print Stylesheet */
+@media print {
+  /* ซ่อนทุกอย่างยกเว้นกล่องเกียรติบัตร */
+  body * {
+    visibility: hidden;
+  }
+  
+  .bg-decorations,
+  .game-header,
+  .global-progress-wrapper,
+  .summary-header,
+  .summary-stats-grid,
+  .cert-action-buttons,
+  .summary-actions-bottom,
+  #syncStatusIndicator,
+  .modal-overlay,
+  #confettiCanvas {
+    display: none !important;
+  }
+
+  .summary-container,
+  .certificate-preview-section,
+  .certificate-canvas-container,
+  #certificateCanvas {
+    visibility: visible !important;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .game-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .certificate-canvas-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFF !important;
+  }
+
+  #certificateCanvas {
+    width: 100vw !important;
+    height: auto !important;
+    max-height: 100vh !important;
+    object-fit: contain;
+  }
+
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+}

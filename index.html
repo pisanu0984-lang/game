@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ผจญภัยย้อนเวลาตะลุยประวัติศาสตร์ ป.3</title>
+  <meta name="description" content="เกมการเรียนรู้ประวัติศาสตร์ ป.3 สำรวจวิถีชีวิตโบราณ หลักฐานประวัติศาสตร์ วีรชนไทย และ 4 อาณาจักร พร้อมรับเกียรติบัตรออนไลน์">
+  <meta name="theme-color" content="#1976D2">
+
+  <!-- Google Fonts: Kanit, Prompt, Mali -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Mali:ital,wght@0,500;0,700;1,600&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/certificate.css">
+</head>
+<body>
+
+  <!-- Floating animated background bubbles -->
+  <div class="bg-decorations">
+    <div class="decor-bubble decor-1"></div>
+    <div class="decor-bubble decor-2"></div>
+    <div class="decor-bubble decor-3"></div>
+  </div>
+
+  <!-- Confetti Canvas for Grand Celebrations -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="game-container">
+
+    <!-- Top Game Header & Status Bar -->
+    <header class="game-header">
+      <div class="logo-section">
+        <span class="logo-icon">⏳</span>
+        <div class="logo-text">
+          <h1>ผจญภัยย้อนเวลา <span class="grade-badge">ประวัติศาสตร์ ป.3</span></h1>
+        </div>
+      </div>
+
+      <!-- Live Player Stats -->
+      <div class="status-stats">
+        <div class="stat-chip student-chip" title="ผู้เล่นปัจจุบัน">
+          <span id="statusAvatarEmoji">👦</span>
+          <span id="statusStudentName">นักผจญภัย ป.3</span>
+        </div>
+        <div class="stat-chip" title="คะแนนสะสม">
+          <span>🏆</span>
+          <span id="statusTotalScore">0</span>
+        </div>
+        <div class="stat-chip coins" title="เหรียญทองสะสม">
+          <span>🪙</span>
+          <span id="statusTotalCoins">0</span>
+        </div>
+        <div class="stat-chip stars" title="ดาวที่ได้รับ">
+          <span>⭐</span>
+          <span id="statusTotalStars">0</span>
+        </div>
+      </div>
+
+      <!-- Controls (Sound, Settings, Reset) -->
+      <div class="nav-controls">
+        <button id="btnToggleSound" class="btn-icon-nav" title="เปิด-ปิดเสียงประกอบ">
+          🔊 <span class="nav-text">ปิดเสียง</span>
+        </button>
+        <button id="btnOpenSettings" class="btn-icon-nav" title="ตั้งค่าระบบ / Google Sheets">
+          ⚙️ <span class="nav-text">ตั้งค่า</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Global Progress Bar Across 5 Stages -->
+    <div class="global-progress-wrapper">
+      <span class="progress-label">🗺️ ความคืบหน้าการเดินทาง:</span>
+      <div class="progress-track">
+        <div id="gameGlobalProgressBar" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- =======================================================
+         SCREEN 1: Start & Player Profile Setup Screen
+         ======================================================= -->
+    <section id="start-screen" class="game-screen active">
+      <div class="start-card">
+        <div class="time-machine-banner">
+          <div class="time-portal">
+            <span class="time-portal-icon">🚀</span>
+          </div>
+          <h2 class="start-title">ผจญภัยย้อนเวลาตะลุยประวัติศาสตร์ ป.3</h2>
+          <p class="start-subtitle">ออกเดินทางข้ามมิติเวลา สู่ดินแดนประวัติศาสตร์ไทย 5 ยุคสมัย!</p>
+        </div>
+
+        <!-- Student Registration Form -->
+        <div class="player-setup-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentNameInput">👤 ชื่อ-นามสกุล หรือชื่อเล่นของนักเรียน:</label>
+              <input type="text" id="studentNameInput" class="form-input" placeholder="เช่น เด็กหญิงฟ้าใส รักษ์สยาม" maxlength="50" required>
+            </div>
+            <div class="form-group" style="max-width: 160px;">
+              <label for="classRoomInput">🏫 ห้องเรียน:</label>
+              <input type="text" id="classRoomInput" class="form-input" placeholder="เช่น ป.3/1" maxlength="15" value="ป.3/1">
+            </div>
+          </div>
+
+          <!-- Avatar Selector -->
+          <div class="avatar-selection-title">🌟 เลือกตัวละครนักเดินทางย้อนเวลา:</div>
+          <div id="avatarSelectionList" class="avatar-grid">
+            <!-- Dynamically populated from CONFIG.AVATARS -->
+          </div>
+        </div>
+
+        <button id="btnStartAdventure" class="btn-primary-big">
+          <span>เริ่มการผจญภัยข้ามเวลา!</span> 🚀
+        </button>
+
+        <div class="start-footer-links">
+          <button id="btnOpenHelp" class="btn-link-help">📖 กติกาและวิธีเล่น</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SCREEN 2: Adventure World Map (5 Stages)
+         ======================================================= -->
+    <section id="map-screen" class="game-screen">
+      <div class="map-container">
+        <!-- Floating cloud decorations -->
+        <div class="map-cloud map-cloud-1">☁️</div>
+        <div class="map-cloud map-cloud-2">☁️</div>
+
+        <div class="map-header-bar">
+          <h2 class="map-main-title">🗺️ แผนที่ท่องกาลเวลาประวัติศาสตร์</h2>
+          <p class="map-instruction">กดเลือกด่านที่ปลดล็อกแล้ว เพื่อเริ่มสำรวจความรู้และพิชิตภารกิจ!</p>
+        </div>
+
+        <div class="map-canvas-area">
+          <div id="mapStagesContainer" class="map-stages-list">
+            <!-- Dynamically generated stage cards 1-5 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SCREEN 3: Stage Knowledge Exploration / Story Screen
+         ======================================================= -->
+    <section id="explore-screen" class="game-screen">
+      <div class="explore-container">
+        <div class="explore-header">
+          <h2 id="exploreStageTitle" class="explore-stage-title">ด่านที่ 1: ชีวิตผู้คนในอดีต</h2>
+          <p id="exploreStageSubtitle" class="explore-stage-subtitle">ยุควิถีชีวิตริมน้ำและชุมชนดั้งเดิม</p>
+          <div id="exploreStageMission" class="explore-mission-box">🎯 ภารกิจ: สำรวจการเปลี่ยนแปลงของวิถีชีวิตไทย</div>
+        </div>
+
+        <!-- 3 Illustrated Knowledge Story Cards -->
+        <div id="exploreStoryCards" class="story-cards-grid">
+          <!-- Dynamically populated from stage.story -->
+        </div>
+
+        <div class="explore-actions">
+          <button class="btn-secondary btn-back-to-map">⬅️ กลับหน้าแผนที่</button>
+          <button id="btnStartStageQuiz" class="btn-start-quiz">
+            <span>เริ่มทำแบบทดสอบประจำด่าน!</span> 📝
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SCREEN 4: Quiz & Question Screen
+         ======================================================= -->
+    <section id="quiz-screen" class="game-screen">
+      <div class="quiz-wrapper">
+        <div class="quiz-header-bar">
+          <span id="quizStageBadge" class="quiz-stage-tag">ด่านที่ 1</span>
+          <span id="quizProgressText" class="quiz-progress-text">คำถามข้อที่ 1 / 4</span>
+        </div>
+
+        <div class="quiz-progress-track">
+          <div id="quizProgressBarFill" class="quiz-progress-fill"></div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="quiz-question-box">
+          <h3 id="quizQuestionText" class="quiz-question-text">เหตุใดคนไทยในอดีตจึงนิยมสร้างบ้านเรือนอยู่ริมแม่น้ำลำคลอง?</h3>
+        </div>
+
+        <!-- 4 Multiple Choice Buttons -->
+        <div id="quizChoicesContainer" class="quiz-choices-grid">
+          <!-- Populated dynamically: 4 choice buttons -->
+        </div>
+
+        <!-- Hint Box & Footer Controls -->
+        <div id="quizHintBox" class="quiz-hint-box"></div>
+
+        <div class="quiz-bottom-controls">
+          <button id="btnUseHint" class="btn-hint">
+            <span>💡 ขอดูคำใบ้จากหุ่นยนต์ไทม์มี่</span>
+          </button>
+          <button class="btn-secondary btn-back-to-map">
+            <span>แผนที่</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         SCREEN 5: Final Summary & Certificate Screen
+         ======================================================= -->
+    <section id="summary-screen" class="game-screen">
+      <div class="summary-container">
+        <div class="summary-header">
+          <div class="summary-congrats-icon">🎉 👑 🎓</div>
+          <h2 class="summary-title">สุดยอดมาก! น้องพิชิตประวัติศาสตร์ ป.3 ครบทั้ง 5 ด่าน</h2>
+          <div id="summaryRankTitle" class="summary-rank-tag">🏆 ยอดนักประวัติศาสตร์น้อยระดับทองคำ</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="summary-stats-grid">
+          <div class="summary-stat-box">
+            <div id="summaryTotalScore" class="stat-num">2,000</div>
+            <div class="stat-desc">คะแนนสะสมรวม</div>
+          </div>
+          <div class="summary-stat-box">
+            <div id="summaryTotalCoins" class="stat-num">200</div>
+            <div class="stat-desc">🪙 เหรียญทอง</div>
+          </div>
+          <div class="summary-stat-box">
+            <div id="summaryTotalStars" class="stat-num">15 / 15</div>
+            <div class="stat-desc">⭐ ดาวแห่งเกียรติยศ</div>
+          </div>
+          <div class="summary-stat-box">
+            <div id="summaryStudentName" class="stat-num" style="font-size: 20px;">น้องฟ้าใส</div>
+            <div class="stat-desc">นักผจญภัยผู้เก่งกาจ</div>
+          </div>
+        </div>
+
+        <!-- Certificate Preview on HTML5 Canvas -->
+        <div class="certificate-preview-section">
+          <h3 style="font-family: var(--font-title); font-size: 20px; color: var(--primary-blue-dark); margin-bottom: 12px;">
+            📜 เกียรติบัตรนักประวัติศาสตร์น้อยดีเด่น
+          </h3>
+          <div class="certificate-canvas-container">
+            <canvas id="certificateCanvas"></canvas>
+          </div>
+
+          <div class="cert-action-buttons">
+            <button id="btnDownloadCert" class="btn-cert-download">
+              <span>💾 ดาวน์โหลดเกียรติบัตร (PNG)</span>
+            </button>
+            <button id="btnPrintCert" class="btn-cert-print">
+              <span>🖨️ พิมพ์เกียรติบัตร (Print / PDF)</span>
+            </button>
+            <button id="btnSyncSheets" class="btn-icon-nav" style="padding: 12px 24px; font-size: 15px;">
+              <span>☁️ ส่งคะแนนไป Google Sheets</span>
+            </button>
+          </div>
+
+          <!-- Status Indicator for Google Sheets Sync -->
+          <div id="syncStatusIndicator"></div>
+        </div>
+
+        <div class="summary-actions-bottom" style="margin-top: 24px; display: flex; justify-content: center; gap: 16px;">
+          <button id="btnPlayAgain" class="btn-primary-big" style="max-width: 320px;">
+            <span>🔄 กลับไปทบทวนแผนที่</span>
+          </button>
+          <button id="btnResetGame" class="btn-secondary" style="border-radius: 30px;">
+            <span>เริ่มเล่นใหม่ตั้งแต่ต้น</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- end .game-container -->
+
+  <!-- =======================================================
+       MODAL 1: Feedback Modal (Instant Quiz Feedback)
+       ======================================================= -->
+  <div id="feedbackModal" class="modal-overlay">
+    <div class="modal-card">
+      <div id="feedbackIcon" class="modal-icon-header">🌟</div>
+      <h3 id="feedbackTitle" class="modal-title">เก่งมาก! ตอบถูกต้อง</h3>
+      <p id="feedbackMessage" class="modal-message">ได้รับ +100 คะแนน และ 10 เหรียญทอง</p>
+      <div id="feedbackExplanation" class="modal-explanation-box">คำอธิบาย...</div>
+      <div class="modal-actions">
+        <button id="btnFeedbackRetry" class="btn-modal-retry">🔄 ลองตอบใหม่อีกครั้ง</button>
+        <button id="btnFeedbackNext" class="btn-modal-next">ลุยข้อต่อไป ➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       MODAL 2: Stage Clear Celebration Modal
+       ======================================================= -->
+  <div id="stageClearModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon-header">🎊</div>
+      <h3 id="stageClearTitle" class="modal-title">ยินดีด้วย! ผ่านด่านที่ 1</h3>
+      <p id="stageClearName" style="font-size: 16px; color: #475569; margin-bottom: 8px;">ชีวิตผู้คนในอดีต</p>
+      <div id="stageClearStars" class="stage-clear-stars-row">
+        <!-- 3 big stars filled dynamically -->
+      </div>
+      <div id="stageClearScore" class="clear-reward-chip">+400 คะแนน</div>
+      <div id="stageClearBadge" style="font-size: 14px; font-weight: 600; color: #0284C7; margin-bottom: 20px;">
+        🏅 ได้รับเหรียญตรา: นักสำรวจวิถีไทย
+      </div>
+      <div class="modal-actions">
+        <button id="btnStageClearContinue" class="btn-modal-next" style="font-size: 18px; padding: 12px 36px;">
+          ไปต่อด่านถัดไป 🗺️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       MODAL 3: Teacher & Google Sheets Settings Modal
+       ======================================================= -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-card" style="text-align: left; max-width: 580px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 class="modal-title" style="margin: 0;">⚙️ ตั้งค่าระบบและ Google Sheets</h3>
+        <button class="modal-close-btn" style="background: none; border: none; font-size: 24px; cursor: pointer;">✕</button>
+      </div>
+
+      <p style="font-size: 14px; color: #64748B; margin-bottom: 16px;">
+        เกมเชื่อมโยงกับ Google Sheets เพื่อบันทึกคะแนนนักเรียน จัดการคลังข้อสอบ และดูสถิติ
+      </p>
+
+      <div class="form-group">
+        <label>📊 Google Spreadsheet ID ปัจจุบัน:</label>
+        <div id="settingsSheetIdDisplay" style="background: #F1F5F9; padding: 8px 12px; border-radius: 6px; font-family: monospace; font-size: 13px; word-break: break-all; color: #0F172A;">
+          1oUEAA3ReyR_HYILmFeH-LKjHUzNQ35me0KxdAWBaVNs
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="settingsGasUrlInput">🔗 Google Apps Script Web App URL:</label>
+        <input type="url" id="settingsGasUrlInput" class="form-input" placeholder="https://script.google.com/macros/s/.../exec">
+        <small style="color: #64748B; font-size: 12px; display: block; margin-top: 4px;">
+          (นำ URL ที่ได้จากการ Deploy Web App ของ Apps Script มาวางที่นี่เพื่อเชื่อมชีตแบบเรียลไทม์)
+        </small>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+        <button id="btnTestGasConnection" class="btn-icon-nav" style="padding: 8px 16px;">
+          🧪 ทดสอบการเชื่อมต่อ
+        </button>
+      </div>
+
+      <div id="settingsTestResult" style="font-size: 13px; margin-bottom: 18px;"></div>
+
+      <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; font-size: 13px; color: #475569; margin-bottom: 20px;">
+        <strong>📁 ชีตที่รองรับ (สร้างอัตโนมัติ):</strong>
+        <ul style="margin-left: 20px; margin-top: 4px;">
+          <li><code>Questions</code> - คลังข้อสอบ 5 ด่าน</li>
+          <li><code>Answers</code> - บันทึกประวัติการตอบรายข้อ</li>
+          <li><code>Students</code> - ทะเบียนและสรุปผลนักเรียน</li>
+          <li><code>Scores</code> - สรุปคะแนนรวมและรหัสเกียรติบัตร</li>
+          <li><code>Settings</code> - การตั้งค่าเกณฑ์ผ่าน</li>
+        </ul>
+      </div>
+
+      <div class="modal-actions" style="justify-content: flex-end;">
+        <button class="btn-secondary modal-close-btn">ยกเลิก</button>
+        <button id="btnSaveSettings" class="btn-modal-next">บันทึกการตั้งค่า</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       MODAL 4: Help & Rules Modal
+       ======================================================= -->
+  <div id="helpModal" class="modal-overlay">
+    <div class="modal-card" style="text-align: left; max-width: 540px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 class="modal-title" style="margin: 0;">📖 กติกาและวิธีเล่น</h3>
+        <button class="modal-close-btn" style="background: none; border: none; font-size: 24px; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="font-size: 14px; color: #334155; line-height: 1.7;">
+        <p><strong>1. เลือกตัวละครและออกเดินทาง:</strong> กรอกชื่อของน้องและเลือกตัวละครผจญภัย</p>
+        <p><strong>2. ผจญภัย 5 ด่านประวัติศาสตร์:</strong>
+          <ul style="margin-left: 20px;">
+            <li>ด่าน 1: ชีวิตผู้คนในอดีต 🛶</li>
+            <li>ด่าน 2: หลักฐานทางประวัติศาสตร์ 📜</li>
+            <li>ด่าน 3: บุคคลสำคัญของไทย 👑</li>
+            <li>ด่าน 4: อาณาจักรไทย 🏰</li>
+            <li>ด่าน 5: วิถีชีวิตและภูมิปัญญาไทย 🪷</li>
+          </ul>
+        </p>
+        <p><strong>3. การทำข้อสอบ:</strong> ในแต่ละด่านจะมีเนื้อหาให้อ่าน จากนั้นตอบคำถาม 4 ตัวเลือก</p>
+        <p><strong>4. คะแนนและรางวัล:</strong>
+          <ul style="margin-left: 20px;">
+            <li>ตอบถูกในครั้งแรก: รับ +100 คะแนน และ 10 เหรียญทอง 🪙</li>
+            <li>หากตอบผิด: จะมีคำใบ้ให้ และสามารถกดลองใหม่ได้เรื่อยๆ</li>
+          </ul>
+        </p>
+        <p><strong>5. เกียรติบัตร:</strong> เมื่อพิชิตครบ 5 ด่าน จะได้รับเกียรติบัตรออนไลน์สวยงาม พร้อมดาวน์โหลดเป็นภาพ PNG หรือสั่งพิมพ์ได้ทันที!</p>
+      </div>
+
+      <div class="modal-actions" style="margin-top: 20px; justify-content: center;">
+        <button class="btn-modal-next modal-close-btn">เข้าใจแล้ว ลุยกันเลย! 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JavaScript Modules -->
+  <script src="js/curriculumData.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/sheetsService.js"></script>
+  <script src="js/certificate.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
